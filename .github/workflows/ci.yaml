@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+    tags: ["v*.*.*"]
+  pull_request:
+    branches: [master]
+
+jobs:
+  test_and_lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Install dependencies (fetch crates)
+        run: cargo fetch
+
+      - name: Run Clippy
+        run: |
+          cargo clippy --all-targets --all-features -- -D warnings
+
+      - name: Run Tests
+        run: cargo test --all-features
+
+  publish:
+    name: Publish to crates.io
+    needs: test_and_lint
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Publish to crates.io
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
+        run: cargo publish

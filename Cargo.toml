@@ -1,0 +1,25 @@
+[package]
+name = "ujumbe_sms"
+version = "1.0.0-beta"
+edition = "2021"
+authors = ["MikeTeddyOmondi <mike_omondi@outlook.com>"]
+description = "A client library for the UjumbeSMS API"
+license = "MIT"
+repository = "https://github.com/MikeTeddyOmondi/ujumbe-sms-rs"
+readme = "README.md"
+
+[dependencies]
+reqwest = { version = "0.12.15", features = ["json"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1", features = ["full"] }
+thiserror = "2.0.12"
+
+[dev-dependencies]
+dotenvy = "0.15.7"
+tokio-test = "0.4"
+mockito = "1.7.0"  # mockito = "0.31"
+
+[[example]]
+name = "send_sms"
+path = "examples/send_sms.rs"
