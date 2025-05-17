@@ -1,6 +1,6 @@
 [package]
 name = "ujumbe_sms"
-version = "1.0.0-beta"
+version = "1.0.0"
 edition = "2021"
 authors = ["MikeTeddyOmondi <mike_omondi@outlook.com>"]
 description = "A client library for the UjumbeSMS API"
