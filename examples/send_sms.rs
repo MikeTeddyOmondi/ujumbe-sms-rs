@@ -38,7 +38,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         "UjumbeSMS".to_string(),
     );
 
-    // Second message bag with different content
+    // Second message bag with different message content
     request.add_message_bag(
         "2547XXXXXXXX,2547XXXXXXXX".to_string(), // "254712345678,254711223344", // Should be a full number and comma separated for multiple
         "UjumbeSMS - message from Rust client library made by mt0.dev!".to_string(),

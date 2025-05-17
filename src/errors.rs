@@ -1,6 +1,9 @@
 use std::fmt;
 use std::error::Error;
 
+/// Custom error type for UjumbeSMS client
+/// This error type encapsulates various errors that can occur while using the UjumbeSMS API
+/// and provides a way to handle them in a consistent manner.
 #[derive(Debug)]
 pub enum UjumbeSmsError {
     NetworkError(reqwest::Error),

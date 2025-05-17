@@ -8,6 +8,7 @@ pub use config::UjumbeSmsConfig;
 pub use errors::UjumbeSmsError;
 pub use models::{ApiResponse, DateTime, MessageBag, MessageRequest, MetaInfo, StatusInfo};
 
+/// UjumbeSMS Rust Client lib tests
 #[cfg(test)]
 mod tests {
     use crate::{MessageRequest, UjumbeSmsClient, UjumbeSmsConfig};

@@ -6,6 +6,8 @@ use reqwest::Client as ReqwestClient;
 
 const API_MESSAGING_ENDPOINT: &str = "/api/messaging";
 
+/// UjumbeSMS Rust client for sending messages using the UjumbeSMS API
+/// Crate: https://crates.io/crates/ujumbe_sms
 pub struct UjumbeSmsClient {
     config: UjumbeSmsConfig,
     http_client: ReqwestClient,

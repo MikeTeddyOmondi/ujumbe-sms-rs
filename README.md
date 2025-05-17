@@ -16,7 +16,7 @@ Add the library to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-ujumbe_sms = "1.0.0" # Check for the latest version
+ujumbe_sms = "1.0.0" # Check for the latest version on `crates.io/crates/ujumbe_sms`
 ```
 
 ## Quick Start
