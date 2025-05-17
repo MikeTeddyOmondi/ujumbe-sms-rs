@@ -9,6 +9,7 @@ on:
 
 jobs:
   test_and_lint:
+    name: Test and Lint Crate
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -49,3 +50,4 @@ jobs:
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
         run: cargo publish
+
