@@ -1,10 +1,10 @@
 use crate::config::UjumbeSmsConfig;
 use crate::errors::UjumbeSmsError;
-use crate::models::{ApiResponse, MessageRequest};
+use crate::models::{
+    BalanceApiResponse, MessageHistoryApiResponse, MessageRequest, MessagingApiResponse,
+};
 use reqwest::header::{HeaderMap, HeaderValue, CONTENT_TYPE};
 use reqwest::Client as ReqwestClient;
-
-const API_MESSAGING_ENDPOINT: &str = "/api/messaging";
 
 /// UjumbeSMS Rust client for sending messages using the UjumbeSMS API
 /// Crate: https://crates.io/crates/ujumbe_sms
@@ -26,13 +26,8 @@ impl UjumbeSmsClient {
         })
     }
 
-    /// Sends messages using the UjumbeSMS API
-    pub async fn send_messages(
-        &self,
-        request: MessageRequest,
-    ) -> Result<ApiResponse, UjumbeSmsError> {
-        let url = format!("{}{}", self.config.base_url, API_MESSAGING_ENDPOINT);
-
+    /// Internal method to attach headers with `UjumbeSmsConfig` configurations set
+    fn attach_headers(&self) -> Result<HeaderMap, UjumbeSmsError> {
         let mut headers = HeaderMap::new();
         headers.insert(
             "X-Authorization",
@@ -47,6 +42,22 @@ impl UjumbeSmsClient {
         headers.insert(CONTENT_TYPE, HeaderValue::from_static("application/json"));
         headers.insert("Cache-Control", HeaderValue::from_static("no-cache"));
 
+        Ok(headers)
+    }
+
+    /// Sends messages using the UjumbeSMS API: https://ujumbesms.co.ke/api/messaging
+    pub async fn send_messages(
+        &self,
+        request: MessageRequest,
+    ) -> Result<MessagingApiResponse, UjumbeSmsError> {
+        let url = format!(
+            "{}{}",
+            self.config.base_url,
+            ApiEndpoint::Messaging.as_str()
+        );
+
+        let headers = self.attach_headers()?;
+
         let response = self
             .http_client
             .post(&url)
@@ -56,7 +67,7 @@ impl UjumbeSmsClient {
             .await?;
 
         if response.status().is_success() {
-            let api_response = response.json::<ApiResponse>().await?;
+            let api_response = response.json::<MessagingApiResponse>().await?;
             Ok(api_response)
         } else {
             // Store the status before consuming the response with text()
@@ -72,9 +83,75 @@ impl UjumbeSmsClient {
         numbers: &str,
         message: &str,
         sender: &str,
-    ) -> Result<ApiResponse, UjumbeSmsError> {
+    ) -> Result<MessagingApiResponse, UjumbeSmsError> {
         let mut request = MessageRequest::new();
         request.add_message_bag(numbers.to_string(), message.to_string(), sender.to_string());
         self.send_messages(request).await
+    }
+
+    /// Credit balance inquiry: https://ujumbesms.co.ke/api/balance
+    pub async fn balance(&self) -> Result<BalanceApiResponse, UjumbeSmsError> {
+        let url = format!("{}{}", self.config.base_url, ApiEndpoint::Balances.as_str());
+
+        let headers = self.attach_headers()?;
+
+        let response = self.http_client.post(&url).headers(headers).send().await?;
+
+        if response.status().is_success() {
+            let api_response = response.json::<BalanceApiResponse>().await?;
+            Ok(api_response)
+        } else {
+            let status = response.status().to_string();
+            let error_text = response.text().await?;
+            Err(UjumbeSmsError::ApiError(status, error_text))
+        }
+    }
+
+    /// Get messages history: https://ujumbesms.co.ke/api/messages
+    pub async fn get_messages_history(&self) -> Result<MessageHistoryApiResponse, UjumbeSmsError> {
+        let url = format!("{}{}", self.config.base_url, ApiEndpoint::Messages.as_str());
+
+        let headers = self.attach_headers()?;
+
+        let response = self.http_client.post(&url).headers(headers).send().await?;
+
+        if response.status().is_success() {
+            let api_response = response.json::<MessageHistoryApiResponse>().await?;
+            Ok(api_response)
+        } else {
+            let status = response.status().to_string();
+            let error_text = response.text().await?;
+            Err(UjumbeSmsError::ApiError(status, error_text))
+        }
+    }
+}
+
+/// `ApiEndpoint` Enum representation of UjumbeSMS API endpoints
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ApiEndpoint {
+    Messaging,
+    Balances,
+    Messages,
+}
+
+impl ApiEndpoint {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            ApiEndpoint::Messaging => "/api/messaging",
+            ApiEndpoint::Balances => "/api/balance",
+            ApiEndpoint::Messages => "/api/messages",
+        }
+    }
+}
+
+impl std::str::FromStr for ApiEndpoint {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "/api/messaging" => Ok(ApiEndpoint::Messaging),
+            "/api/balance" => Ok(ApiEndpoint::Balances),
+            "/api/messages" => Ok(ApiEndpoint::Messages),
+            _ => Err(()),
+        }
     }
 }

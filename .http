@@ -1,0 +1,39 @@
+@hostname = ujumbesms.co.ke
+# @port = 8080
+# @host = {{hostname}}:{{port}}
+@contentType = application/json
+# @createdAt = {{$datetime iso8601}}
+# @apiKey = {{$processEnv UJUMBESMS_API_KEY}}
+# @userEmail = {{$processEnv UJUMBESMS_EMAIL}}
+@apiKey = YOUR API KEY HERE
+@userEmail = YOUR ACCOUNT EMAIl HERE
+
+### Messaging API // "0712345678,0712789456" // Add your purchased SenderID here
+POST https://{{hostname}}/api/messaging
+Content-Type: {{contentType}}
+X-Authorization: {{apiKey}}
+Email: {{userEmail}}
+
+{  
+   "data":[  
+      {  
+         "message_bag":{  
+            "numbers": "0711223344",  
+            "message": "Rest client message", 
+            "sender": "UjumbeSMS"   
+         } 
+      } 
+   ] 
+} 
+
+### Balance API
+POST https://{{hostname}}/api/balance
+Content-Type: application/json
+X-Authorization: {{apiKey}}
+Email: {{userEmail}}
+
+### Messages History API
+POST https://{{hostname}}/api/messages
+Content-Type: application/json
+X-Authorization: {{apiKey}}
+Email: {{userEmail}}

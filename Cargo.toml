@@ -1,6 +1,6 @@
 [package]
 name = "ujumbe_sms"
-version = "1.0.0"
+version = "1.1.0"
 edition = "2021"
 authors = ["MikeTeddyOmondi <mike_omondi@outlook.com>"]
 description = "A client library for the UjumbeSMS API"
@@ -9,7 +9,7 @@ repository = "https://github.com/MikeTeddyOmondi/ujumbe-sms-rs"
 readme = "README.md"
 
 [dependencies]
-reqwest = { version = "0.12.15", features = ["json"] }
+reqwest = { version = "0.12.22", features = ["json"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tokio = { version = "1", features = ["full"] }
@@ -18,8 +18,20 @@ thiserror = "2.0.12"
 [dev-dependencies]
 dotenvy = "0.15.7"
 tokio-test = "0.4"
-mockito = "1.7.0"  # mockito = "0.31"
+mockito = "1.7.0"
 
 [[example]]
 name = "send_sms"
 path = "examples/send_sms.rs"
+
+[[example]]
+name = "send_using_message_bags"
+path = "examples/send_using_message_bags.rs"
+
+[[example]]
+name = "credit_balance_inquiry"
+path = "examples/credit_balance_inquiry.rs"
+
+[[example]]
+name = "message_history"
+path = "examples/messages_history.rs"
