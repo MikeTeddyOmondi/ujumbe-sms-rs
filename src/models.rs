@@ -186,7 +186,7 @@ impl MessageHistoryApiResponse {
         self.items
             .data
             .iter()
-            .filter(|msg| msg.number == number)
+            .filter(|msg| msg.number.contains(number))
             .collect()
     }
 }
