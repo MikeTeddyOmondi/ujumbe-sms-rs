@@ -3,12 +3,12 @@
 # @host = {{hostname}}:{{port}}
 @contentType = application/json
 # @createdAt = {{$datetime iso8601}}
-# @apiKey = {{$processEnv UJUMBESMS_API_KEY}}
-# @userEmail = {{$processEnv UJUMBESMS_EMAIL}}
-@apiKey = YOUR API KEY HERE
-@userEmail = YOUR ACCOUNT EMAIl HERE
+# @apiKey = YOUR API KEY HERE
+@apiKey = {{$dotenv UJUMBESMS_API_KEY}}
+# @userEmail = YOUR ACCOUNT EMAIl HERE
+@userEmail = {{$dotenv UJUMBESMS_EMAIL}}
 
-### Messaging API // "0712345678,0712789456" // Add your purchased SenderID here
+### Messaging API
 POST https://{{hostname}}/api/messaging
 Content-Type: {{contentType}}
 X-Authorization: {{apiKey}}
