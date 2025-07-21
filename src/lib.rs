@@ -336,14 +336,12 @@ mod tests {
 
             let client = UjumbeSmsClient::new(config).unwrap();
 
-            // Test sending a single message
-            let result = client
-                .balance()
-                .await;
+            // Test sending a balance inquiry
+            let result = client.balance().await;
 
             // Verify the mock was called
             _mock.assert();
-            // println!("{:?}", &result);
+            // println!("{result:#?}");
 
             assert!(result.is_ok());
             let response = result.unwrap();
@@ -375,23 +373,62 @@ mod tests {
                 .with_header("content-type", "application/json")
                 .with_body(
                     r#"{
-                    "status": {
-                        "code": "1008",
-                        "type": "success",
-                        "description": "Your messages have been queued"
-                    },
-                    "meta": {
-                        "recipients": 1,
-                        "credits_deducted": 1,
-                        "available_credits": "6608",
-                        "user_email": "test@email.com",
-                        "date_time": {
-                            "date": "20150815 18:19:47",
-                            "timezone_type": 3,
-                            "timezone": "Africa/Nairobi"
+                        "status": {
+                            "code": "1008",
+                            "type": "success",
+                            "description": "Query Success"
+                        },
+                        "meta": {
+                            "user": "ujumbe_account_email@email.com",
+                            "date_time": {
+                                "date": "2025-07-20 23:54:46.866172",
+                                "timezone_type": 3,
+                                "timezone": "Africa/Nairobi"
+                            }
+                        },
+                        "items": {
+                            "total": 2,
+                            "per_page": 50,
+                            "current_page": 1,
+                            "last_page": 1,
+                            "next_page_url": null,
+                            "prev_page_url": null,
+                            "from": 1,
+                            "to": 2,
+                            "data": [
+                                {
+                                    "id": 1,
+                                    "request_id": 10001,
+                                    "number": "+254711111111",
+                                    "message": "First test message",
+                                    "user_id": 3062,
+                                    "sender_id": "UJUMBESMS",
+                                    "transaction_id": "t1",
+                                    "message_count": 1,
+                                    "status": "DeliveredToTerminal",
+                                    "flag": "API|",
+                                    "created_at": "2025-07-20 18:18:11",
+                                    "updated_at": "2025-07-20 18:18:19",
+                                    "scheduled_date": "2025-07-20 18:18:11"
+                                },
+                                {
+                                    "id": 2,
+                                    "request_id": 10002,
+                                    "number": "+254722222222",
+                                    "message": "Second test message",
+                                    "user_id": 3062,
+                                    "sender_id": "UJUMBESMS",
+                                    "transaction_id": "t2",
+                                    "message_count": 1,
+                                    "status": "SENT",
+                                    "flag": "API|",
+                                    "created_at": "2025-07-20 18:23:06",
+                                    "updated_at": "2025-07-20 18:24:07",
+                                    "scheduled_date": "2025-07-20 18:23:01"
+                                }
+                            ]
                         }
-                    }
-                }"#,
+                    }"#,
                 )
                 .create();
 
@@ -402,23 +439,23 @@ mod tests {
 
             let client = UjumbeSmsClient::new(config).unwrap();
 
-            // Test sending a single message
-            let result = client
-                .send_single_message("254712345678", "Single test message", "UjumbeSMS")
-                .await;
+            // Test getting message history
+            let result = client.get_messages_history().await;
 
             // Verify the mock was called
             _mock.assert();
-            // println!("{:?}", &result);
+            // println!("{result:#?}");
 
             assert!(result.is_ok());
             let response = result.unwrap();
             assert_eq!(response.status.code, "1008");
             assert_eq!(response.status.r#type, "success");
-            assert_eq!(response.meta.clone().unwrap().recipients, 1);
-            assert_eq!(response.meta.clone().unwrap().credits_deducted, 1);
-            assert_eq!(response.meta.clone().unwrap().user_email, "test@email.com");
-            assert_eq!(response.meta.clone().unwrap().available_credits, "6608");
+            assert_eq!(response.items.clone().total, 2);
+            assert_eq!(response.items.clone().data.len(), 2);
+            assert_eq!(
+                response.meta.clone().unwrap().user,
+                "ujumbe_account_email@email.com"
+            );
         });
     }
 }

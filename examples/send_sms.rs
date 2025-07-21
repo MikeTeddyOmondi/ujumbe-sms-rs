@@ -11,7 +11,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Create configuration
     let config = UjumbeSmsConfig::new(
         api_key, // "ZDIzNTFm....".to_string()
-        email, // "user@example.com".to_string()
+        email,   // "user@example.com".to_string()
     );
 
     // Initialize client
@@ -26,7 +26,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         )
         .await?;
 
-    println!("Single message response: {:#?}", response);
+    println!("Single message response: {response:#?}");
 
     Ok(())
 }

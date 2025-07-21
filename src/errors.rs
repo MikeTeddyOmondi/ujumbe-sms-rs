@@ -1,5 +1,5 @@
-use std::fmt;
 use std::error::Error;
+use std::fmt;
 
 /// Custom error type for UjumbeSMS client
 /// This error type encapsulates various errors that can occur while using the UjumbeSMS API
@@ -15,10 +15,10 @@ pub enum UjumbeSmsError {
 impl fmt::Display for UjumbeSmsError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            UjumbeSmsError::NetworkError(e) => write!(f, "Network error: {}", e),
-            UjumbeSmsError::ApiError(code, desc) => write!(f, "API error {}: {}", code, desc),
-            UjumbeSmsError::SerializationError(e) => write!(f, "Serialization error: {}", e),
-            UjumbeSmsError::InvalidConfig(msg) => write!(f, "Invalid configuration: {}", msg),
+            UjumbeSmsError::NetworkError(e) => write!(f, "Network error: {e}"),
+            UjumbeSmsError::ApiError(code, desc) => write!(f, "API error {code}: {desc}"),
+            UjumbeSmsError::SerializationError(e) => write!(f, "Serialization error: {e}"),
+            UjumbeSmsError::InvalidConfig(msg) => write!(f, "Invalid configuration: {msg}"),
         }
     }
 }

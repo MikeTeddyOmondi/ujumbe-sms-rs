@@ -19,8 +19,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let response = client.get_messages_history().await?;
 
-    println!("Messages History (DELIVERED): {:#?}", response.get_delivered_messages());
-    println!("Messages History (FAILED): {:#?}", response.get_failed_messages());
+    println!(
+        "Messages History (DELIVERED): {:#?}",
+        response.get_delivered_messages()
+    );
+    println!(
+        "Messages History (FAILED): {:#?}",
+        response.get_failed_messages()
+    );
     println!(
         "Messages History (SENT TO SPECIFIC NUMBER): {:#?}",
         response.get_messages_by_number("254720215635")

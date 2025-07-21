@@ -19,7 +19,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let response = client.balance().await?;
 
-    println!("Credit balance Inquiry: {:#?}", response);
+    println!("Credit balance Inquiry: {response:#?}");
 
     Ok(())
 }

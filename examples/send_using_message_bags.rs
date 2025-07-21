@@ -11,7 +11,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Create configuration
     let config = UjumbeSmsConfig::new(
         api_key, // "ZDIzNTFm....".to_string()
-        email, // "user@example.com".to_string()
+        email,   // "user@example.com".to_string()
     );
 
     // Initialize client
@@ -35,7 +35,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     );
 
     let response = client.send_messages(request).await?;
-    println!("Multiple message response: {:?}", response);
+    println!("Multiple message response: {response:?}");
 
     Ok(())
 }
