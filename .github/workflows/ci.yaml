@@ -36,7 +36,7 @@ jobs:
 
   publish:
     name: Publish to crates.io
-    needs: test_and_lint
+    needs: test_format_and_lint
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     steps:
